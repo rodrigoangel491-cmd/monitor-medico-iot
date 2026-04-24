@@ -45,7 +45,7 @@
         .temp-box { 
             background: rgba(15, 23, 42, 0.7); 
             border-radius: 25px; 
-            padding: 40px 10px; 
+            padding: 30px 10px; 
             margin: 20px 0; 
             border: 1px solid rgba(255,255,255,0.1);
         }
@@ -59,7 +59,18 @@
 
         .unit { font-size: 1.8rem; color: var(--accent); vertical-align: super; }
 
+        /* ESTILO PARA EL DIAGNÓSTICO */
+        #diagnostico {
+            display: block;
+            margin-top: -10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
         .status-container {
+            margin-top: 15px;
             margin-bottom: 20px;
             padding: 8px 15px;
             background: rgba(0,0,0,0.2);
@@ -121,6 +132,7 @@
         
         <div class="temp-box">
             <span id="temp" class="value">--.-</span><span class="unit">°C</span>
+            <span id="diagnostico">Cargando...</span>
         </div>
 
         <div class="status-container">
@@ -149,14 +161,21 @@
                     document.getElementById('temp').innerText = tempValue.toFixed(1);
                     
                     const card = document.getElementById('mainCard');
+                    const diag = document.getElementById('diagnostico');
                     
-                    // Lógica de colores dinámica
-                    if (tempValue < 30) {
+                    // Lógica médica aplicada
+                    if (tempValue < 35.5) {
                         card.className = "card temp-cold";
-                    } else if (tempValue >= 30 && tempValue <= 37.5) {
+                        diag.innerText = "Temperatura Baja";
+                    } else if (tempValue >= 35.5 && tempValue <= 37.5) {
                         card.className = "card temp-normal";
+                        diag.innerText = "Estado Normal";
+                    } else if (tempValue > 37.5 && tempValue <= 38.5) {
+                        card.className = "card temp-hot";
+                        diag.innerText = "Fiebre Leve";
                     } else {
                         card.className = "card temp-hot";
+                        diag.innerText = "Alerta: Fiebre Alta";
                     }
 
                     document.getElementById('status').innerText = "ACTUALIZADO EN VIVO";
