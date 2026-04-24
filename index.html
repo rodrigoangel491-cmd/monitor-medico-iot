@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Médico IoT - En Vivo</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; color: white; }
+        .card { background: #1e293b; padding: 2.5rem; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center; border: 2px solid #00adc1; width: 320px; }
+        h1 { color: #00adc1; font-size: 1.1rem; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
+        .temp-box { background: #0f172a; border-radius: 20px; padding: 30px 10px; margin: 20px 0; border: 1px solid #334155; }
+        .value { font-size: 4.5rem; font-weight: 800; color: #fff; text-shadow: 0 0 20px rgba(0, 173, 193, 0.5); }
+        .unit { font-size: 1.5rem; color: #00adc1; vertical-align: super; }
+        .status-dot { height: 10px; width: 10px; background-color: #22c55e; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 10px #22c55e; }
+        .status-text { font-size: 0.8rem; color: #94a3b8; }
+        .footer { margin-top: 25px; font-size: 0.75rem; color: #64748b; line-height: 1.4; border-top: 1px solid #334155; padding-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>MONITOR MÉDICO</h1>
+        <div class="temp-box">
+            <span id="temp" class="value">--.-</span><span class="unit">°C</span>
+        </div>
+        <div>
+            <span class="status-dot"></span>
+            <span id="status" class="status-text">RECIBIENDO DATOS</span>
+        </div>
+        <div class="footer">
+            <strong>EXPOSITORES:</strong><br>
+            Rodrigo Angel & Jose<br>
+            <span style="color: #00adc1;">SISTEMA BIOMÉDICO IoT</span>
+        </div>
+    </div>
+
+    <script>
+        // TU TOKEN ACTUALIZADO
+        const token = "KOO6wgz_gRwtfGocyHUkNvVl-XPdK3D7";
+        const url = `https://blynk.cloud/external/api/get?token=${token}&V0`;
+
+        async function updateTemp() {
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const data = await response.text();
+                    const tempValue = parseFloat(data).toFixed(1);
+                    document.getElementById('temp').innerText = tempValue;
+                    document.getElementById('status').innerText = "EN LÍNEA - ACTUALIZADO";
+                    document.getElementById('status').style.color = "#22c55e";
+                }
+            } catch (error) {
+                document.getElementById('status').innerText = "RECONECTANDO...";
+                document.getElementById('status').style.color = "#ef4444";
+            }
+        }
+
+        setInterval(updateTemp, 2000); // Actualiza cada 2 segundos
+        updateTemp();
+    </script>
+</body>
+</html>
